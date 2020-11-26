@@ -1,0 +1,6 @@
+/dist
+/node_modules
+/.vscode
+ormconfig.json
+.env
+/tmp/uploads/*
