@@ -1,0 +1,47 @@
+version: "3.7"
+
+services:
+
+  webserver:
+    image: nginx:alpine
+    container_name: urtimr_proxy
+    volumes:
+      - ./src:/src
+      - ./.docker/nginx/conf.d/:/etc/nginx/conf.d/
+    ports:
+      - "80:80"
+    networks:
+      - app-network
+    depends_on:
+      - app
+
+  app:
+    build:
+      context: ./
+      dockerfile: ./.docker/node/Dockerfile
+    container_name: urtimr_back
+    volumes:
+      - ./:/src
+    working_dir: /src
+    networks:
+        - app-network
+    depends_on:
+      - db
+
+  db:
+    container_name: urtimr_db
+    image: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./.docker/db:/data/postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      PGDATA: /data/postgres
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

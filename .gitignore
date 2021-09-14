@@ -4,3 +4,4 @@
 ormconfig.json
 .env
 /tmp/uploads/*
+/.docker/db
